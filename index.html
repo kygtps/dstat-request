@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Counter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to My Static Website</h1>
+    <p>This website counts visits even though it is hosted on GitHub Pages.</p>
+    <h2>Total Visits: <span id="visit-count">0</span></h2>
+    <p>The counter resets every hour.</p>
+
+    <script>
+        // Dapatkan waktu saat ini dalam bentuk Unix timestamp (detik sejak 1 Januari 1970)
+        const currentTime = Math.floor(Date.now() / 1000);
+
+        // Durasi reset dalam detik (1 jam = 3600 detik)
+        const resetInterval = 3600;
+
+        // Baca jumlah kunjungan dan waktu reset terakhir dari localStorage
+        let visitCount = localStorage.getItem('visitCount');
+        let lastResetTime = localStorage.getItem('lastResetTime');
+
+        // Jika data tidak ada, inisialisasi dengan nilai awal
+        if (!visitCount || !lastResetTime) {
+            visitCount = 0;
+            lastResetTime = currentTime;
+        }
+
+        // Konversi ke angka
+        visitCount = parseInt(visitCount);
+        lastResetTime = parseInt(lastResetTime);
+
+        // Jika sudah lebih dari 1 jam sejak reset terakhir, reset counter
+        if (currentTime - lastResetTime >= resetInterval) {
+            visitCount = 1; // Reset ke 1 karena ini hitungan pertama setelah reset
+            lastResetTime = currentTime; // Perbarui waktu reset
+        } else {
+            visitCount++; // Tambahkan 1 ke jumlah kunjungan
+        }
+
+        // Simpan jumlah kunjungan dan waktu reset terakhir ke localStorage
+        localStorage.setItem('visitCount', visitCount);
+        localStorage.setItem('lastResetTime', lastResetTime);
+
+        // Tampilkan jumlah kunjungan di halaman
+        document.getElementById('visit-count').innerText = visitCount;
+    </script>
+</body>
+</html>
